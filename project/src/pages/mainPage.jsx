@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api';
 import Countries from "../data/Countries"
 import { Megaphone } from 'lucide-react';
-import { Eye } from 'lucide-react';
 import { Search } from 'lucide-react';
+
 export default function MainPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCountries, setFilteredCountries] = useState([]);
@@ -25,6 +25,12 @@ export default function MainPage() {
 
   const [center, setCenter] = useState(null);
   const [showUserInfo, setUserShowInfo] = useState(false);
+
+
+  const mapRef = useRef(null);
+  const handleMapLoad = (map) => {
+    mapRef.current = map;
+  };
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -54,7 +60,15 @@ export default function MainPage() {
         const code = results[0].code;
         fetch(`https://api.openchargemap.io/v3/poi/?output=json&countrycode=${code}&maxresults=10&key=f4633e6c-f1d0-4b8d-8345-b65c26f9a6af`)
           .then(res => res.json())
-          .then(data => setChargers(data))
+          .then(data => {
+            setChargers(data);
+            if (data.length > 0 && mapRef.current) {
+              setTimeout(() => {
+                const { Latitude, Longitude } = data[0].AddressInfo;
+                mapRef.current.panTo({ lat: Latitude, lng: Longitude });
+              }, 500);
+            }
+          })
           .catch(err => console.error(err));
       } else {
         setChargers([]);
@@ -87,71 +101,71 @@ export default function MainPage() {
   }
 
   return (
-  <>
-        <div className="absolute top-2 right-2 z-20 group">
-          <button
-            className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-md hover:bg-gray-100 transition"
-            onClick={() => window.location.href = "https://www.gmail.com"}
-          >
-            <Megaphone className="w-6 h-6 text-green-700" />
-          </button>
+    <>
+      <div className="absolute top-2 right-2 z-20 group">
+        <button
+          className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-md hover:bg-gray-100 transition"
+          onClick={() => window.location.href = "https://www.gmail.com"}
+        >
+          <Megaphone className="w-6 h-6 text-green-700" />
+        </button>
 
-          <div className="hidden group-hover:block absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-200 p-4 space-y-2 transition-all">
-            <ul className="space-y-1">
-              <li>
-                <a
-                  href="mailto:malik.ahmetbegovic@gmail.com,MKImamovic@gmail.com"
-                  target="_blank"
-                  className="block text-gray-700 hover:text-green-700 hover:underline transition"
-                >
-                  ✉ Contact us via email
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://github.com/MKImamovic"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block text-gray-700 hover:text-blue-600 hover:underline transition"
-                >
-                  💻 Visit our GitHub 1
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://github.com/Coderecorder"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block text-gray-700 hover:text-blue-600 hover:underline transition"
-                >
-                  💻 Visit our GitHub 2
-                </a>
-              </li>
-            </ul>
-          </div>
+        <div className="hidden group-hover:block absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-200 p-4 space-y-2 transition-all">
+          <ul className="space-y-1">
+            <li>
+              <a
+                href="mailto:malik.ahmetbegovic@gmail.com,MKImamovic@gmail.com"
+                target="_blank"
+                className="block text-gray-700 hover:text-green-700 hover:underline transition"
+              >
+                ✉ Contact us via email
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://github.com/MKImamovic"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block text-gray-700 hover:text-blue-600 hover:underline transition"
+              >
+                💻 Visit our GitHub 1
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://github.com/Coderecorder"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block text-gray-700 hover:text-blue-600 hover:underline transition"
+              >
+                💻 Visit our GitHub 2
+              </a>
+            </li>
+          </ul>
         </div>
+      </div>
 
-        <div className="absolute top-15 md:top-2.5 lg:top-3  left-1/2 transform -translate-x-1/2 z-10 w-[90%] sm:w-[70%] md:w-[50%]">
-          <div className="flex items-center bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
-            <div className="p-2 pl-3 text-gray-500">
-              <Search className="w-5 h-5" />
-            </div>
-            <input
-              id="search"
-              type="text"
-              placeholder="Search a country..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="flex-1 bg-transparent text-gray-800 placeholder-gray-400 focus:outline-none p-2 text-sm sm:text-base"
-            />
+      <div className="absolute top-15 md:top-2.5 lg:top-3  left-1/2 transform -translate-x-1/2 z-10 w-[90%] sm:w-[70%] md:w-[50%]">
+        <div className="flex items-center bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
+          <div className="p-2 pl-3 text-gray-500">
+            <Search className="w-5 h-5" />
           </div>
+          <input
+            id="search"
+            type="text"
+            placeholder="Search a country..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="flex-1 bg-transparent text-gray-800 placeholder-gray-400 focus:outline-none p-2 text-sm sm:text-base"
+          />
         </div>
-
+      </div>
 
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
         zoom={12}
+        onLoad={handleMapLoad}
       >
         <Marker
           position={center}
@@ -275,7 +289,6 @@ export default function MainPage() {
               )}
             </div>
           </InfoWindow>
-
         )}
       </GoogleMap>
     </>
