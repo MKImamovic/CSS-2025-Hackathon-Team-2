@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api';
 import Countries from "../data/Countries"
-
+import { Megaphone } from 'lucide-react';
 export default function MainPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCountries, setFilteredCountries] = useState([]);
@@ -69,6 +69,9 @@ export default function MainPage() {
 
   return (
   <>
+        <div className ="pr-2 pl-auto absolute">
+          <Megaphone className="h-2 w-2 text-white"></Megaphone>
+        </div>
         <div className="flex justify-center p-0.5 bg-transparent m-1 absolute z-10 left-1/2 transform -translate-x-1/2">
           <input className="bg-white text-black border-black-1 rounded-xl m-2 p-1"
           id="search"
