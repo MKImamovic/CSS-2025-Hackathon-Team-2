@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api';
 import Countries from "../data/Countries"
 import { Megaphone } from 'lucide-react';
+import { Eye } from 'lucide-react';
 export default function MainPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCountries, setFilteredCountries] = useState([]);
@@ -87,11 +88,12 @@ export default function MainPage() {
 
   return (
   <>
-        <div className ="pr-13 pt-1 flex absolute bg-transparent z-10 top-0 right-0 m-2 rounded-full group">
+        <Eye className='absolute z-10 top-25 left-5 hover:cursor-pointer hover:scale-200 transition duration-200 ease-in-out' />
+        <div className ="pr-13 pt-1 flex absolute bg-transparent z-10 top-0 right-0 m-2 rounded-full group ">
           <button className="bg-transparent text-black text-xl " onClick={() => window.location.href= "https://www.gmail.com"}>
           <Megaphone className="h-10 w-10 text-black " />
           </button>
-          <div className="hidden group-hover:block">
+          <div className="hidden group-hover:block ease-in-out">
             <ul>
               <li><a href="mailto:malik.ahmetbegovic@gmail.com,MKImamovic@gmail.com"
                      target="_blank"
@@ -109,7 +111,7 @@ export default function MainPage() {
           </div>
         </div>
         <div className="flex justify-center p-0.5 bg-transparent m-1 absolute z-10 left-1/2 transform -translate-x-1/2">
-          <input className="bg-white text-black border-black-1 rounded-xl m-2 p-1"
+          <input className="bg-white text-black border-black-1 rounded-xl mt-15 md:m-2 lg:m-2 p-1"
           id="search"
           type="text"
           placeholder="Search a country..."
