@@ -10,7 +10,7 @@ const navigate = useNavigate();
       <div className="flex items-center justify-center h-screen w-screen bg-[#FAEDCE]">
         <div className="flex flex-col items-center justify-center">
           <h1 className="text-7xl mb-8 text-[#8FA31E]">VoltMap</h1>
-          <button className="bg-[#E0E5B6] px-6 py-2 rounded w-100 h-20 hover:bg-[#CCD5AE] transition duration-200 ease-in-out cursor-pointer"
+          <button className="bg-[#E0E5B6] px-6 py-2 rounded w-100 h-20 hover:bg-[#CCD5AE] transition duration-200 ease-in-out cursor-pointer border-1 rounded-2xl hover:-translate-y-1"
           onClick={handleClick}>Discover chargers around you</button>
         </div>
       </div>

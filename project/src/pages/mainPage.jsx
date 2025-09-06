@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
+import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api';
 
 const containerStyle = {
   width: '100vw',
@@ -17,6 +17,8 @@ export default function MainPage() {
   });
 
   const [center, setCenter] = useState(defaultCenter);
+  const [showUserInfo, setUserShowInfo] = useState(false);
+  const [showChargerInfo, setChargerShowInfo] = useState(false);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -27,9 +29,7 @@ export default function MainPage() {
             lng: position.coords.longitude
           });
         },
-        () => {
-          // If user denies geolocation, keep default center
-        }
+        () => {}
       );
     }
   }, []);
@@ -44,7 +44,21 @@ export default function MainPage() {
       center={center}
       zoom={12}
     >
-      <Marker position={center} />
+      <Marker
+        position={center}
+        onClick={() => setUserShowInfo(true)}
+      />
+      {showUserInfo && (
+        <InfoWindow
+          position={center}
+          onCloseClick={() => setUserShowInfo(false)}
+        >
+          <div className='p-2 w-50'>
+            <h2 className='text-xl'>Your Location</h2>
+          </div>
+        </InfoWindow>
+      )}
+      
     </GoogleMap>
   );
 }
