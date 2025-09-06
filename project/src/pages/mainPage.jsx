@@ -91,7 +91,7 @@ export default function MainPage() {
           <button className="bg-transparent text-black text-xl " onClick={() => window.location.href= "https://www.gmail.com"}>
           <Megaphone className="h-10 w-10 text-black " />
           </button>
-          <div className="hidden group-hover:block">
+          <div className="hidden group-hover:block ease-in-out">
             <ul>
               <li><a href="mailto:malik.ahmetbegovic@gmail.com,MKImamovic@gmail.com"
                      target="_blank"
