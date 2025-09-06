@@ -58,9 +58,8 @@ export default function MainPage() {
           </div>
         </InfoWindow>
       )}
-      
+
     </GoogleMap>
   );
 }
 
-export default mainPage
