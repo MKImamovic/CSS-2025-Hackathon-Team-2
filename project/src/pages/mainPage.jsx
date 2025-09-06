@@ -105,7 +105,7 @@ export default function MainPage() {
       <div className="absolute top-2 right-2 z-20 group">
         <button
           className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-md hover:bg-gray-100 transition"
-          onClick={() => window.location.href = "https://www.gmail.com"}
+          
         >
           <Megaphone className="w-6 h-6 text-green-700" />
         </button>
