@@ -101,7 +101,7 @@ export default function MainPage() {
 
   return (
     <>
-      {/* Sidebar for charger info */}
+      
       {selectedCharger && (
         <div className="fixed top-0 left-0 h-full w-[350px] max-w-full bg-white shadow-2xl z-30 p-6 overflow-y-auto transition-transform duration-300 ease-in-out">
           <button
@@ -205,7 +205,7 @@ export default function MainPage() {
         </div>
       )}
 
-      {/* Top right contact button */}
+      
       <div className="absolute top-2 right-2 z-20 group">
         <button
           className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-md hover:bg-gray-100 transition"
@@ -248,7 +248,7 @@ export default function MainPage() {
         </div>
       </div>
 
-      {/* Search bar */}
+      
       <div className="absolute top-15 md:top-2.5 lg:top-3  left-1/2 transform -translate-x-1/2 z-10 w-[90%] sm:w-[70%] md:w-[50%]">
         <div className="flex items-center bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
           <div className="p-2 pl-3 text-gray-500">
@@ -265,7 +265,7 @@ export default function MainPage() {
         </div>
       </div>
 
-      {/* Map */}
+      
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
