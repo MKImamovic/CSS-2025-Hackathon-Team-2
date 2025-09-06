@@ -69,8 +69,26 @@ export default function MainPage() {
 
   return (
   <>
-        <div className ="pr-2 pl-auto absolute">
-          <Megaphone className="h-2 w-2 text-white"></Megaphone>
+        <div className ="pr-13 pt-1 flex absolute bg-transparent z-10 top-0 right-0 m-2 rounded-full group ">
+          <button className="bg-transparent text-black text-xl " onClick={() => window.location.href= "https://www.gmail.com"}>
+          <Megaphone className="h-10 w-10 text-black " />
+          </button>
+          <div className="hidden group-hover:block">
+            <ul>
+              <li><a href="mailto:malik.ahmetbegovic@gmail.com,MKImamovic@gmail.com"
+                     target="_blank"
+                     >Contact us over mail!</a></li>
+              <li><a 
+                      href="https://github.com/MKImamovic"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-800 hover:text-black hover:underline">Visit our GitHub1</a></li>
+                      <li><a href="https://github.com/Coderecorder"
+                             target="_blank"
+                             rel="noopener noreferrer"
+                             className="text-gray-800 hover:text-black hover:underline">Visit our GitHub2</a></li>
+            </ul>
+          </div>
         </div>
         <div className="flex justify-center p-0.5 bg-transparent m-1 absolute z-10 left-1/2 transform -translate-x-1/2">
           <input className="bg-white text-black border-black-1 rounded-xl m-2 p-1"
