@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
-import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api';
+import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 import Countries from "../data/Countries"
 import { Megaphone } from 'lucide-react';
-import { Search } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 
 export default function MainPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -25,7 +25,6 @@ export default function MainPage() {
 
   const [center, setCenter] = useState(null);
   const [showUserInfo, setUserShowInfo] = useState(false);
-
 
   const mapRef = useRef(null);
   const handleMapLoad = (map) => {
@@ -102,6 +101,111 @@ export default function MainPage() {
 
   return (
     <>
+      {/* Sidebar for charger info */}
+      {selectedCharger && (
+        <div className="fixed top-0 left-0 h-full w-[350px] max-w-full bg-white shadow-2xl z-30 p-6 overflow-y-auto transition-transform duration-300 ease-in-out">
+          <button
+            className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
+            onClick={() => {
+              setSelectedCharger(null);
+              setShowReviews(false);
+            }}
+          >
+            <X size={28} />
+          </button>
+          <div className="mt-2">
+            <h2 className="font-bold text-2xl text-gray-800 mb-1">
+              {selectedCharger.AddressInfo.Title}
+            </h2>
+            <p className="text-sm text-gray-600 mb-2">
+              {selectedCharger.AddressInfo.AddressLine1}
+            </p>
+            <div className="space-y-1 text-base text-gray-700 mb-4">
+              <p>
+                <span className="font-semibold">⚡ Power:</span>{" "}
+                {selectedCharger.Connections && selectedCharger.Connections.length > 0
+                  ? Math.max(...selectedCharger.Connections.map(conn => conn.PowerKW || 0)) + " kW"
+                  : "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold">🔌 Quantity:</span>{" "}
+                {selectedCharger.Connections ? selectedCharger.Connections.length : "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold">🔋 Type:</span>{" "}
+                {selectedCharger.Connections.length > 0 &&
+                selectedCharger.Connections[0].CurrentType
+                  ? selectedCharger.Connections[0].CurrentType.Title
+                  : "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold">🌍 Country:</span>{" "}
+                {selectedCharger.AddressInfo.Country?.Title || "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold">🏢 Operator:</span>{" "}
+                {selectedCharger.OperatorInfo?.Title || "N/A"}
+              </p>
+              
+              <p>
+                <span className="font-semibold">🔗 Status:</span>{" "}
+                {selectedCharger.StatusType?.Title || "N/A"}
+              </p>
+              <p>
+                <span className="font-semibold">💳 Usage:</span>{" "}
+                {selectedCharger.UsageType?.Title || "N/A"}
+              </p>
+            </div>
+            <div className="flex gap-2 mb-4">
+              <button
+                className="flex-1 px-3 py-2 bg-[#8FA31E] text-white rounded-lg text-base font-medium shadow hover:bg-[#6c8016] transition"
+                onClick={() => {
+                  const lat = selectedCharger.AddressInfo.Latitude;
+                  const lng = selectedCharger.AddressInfo.Longitude;
+                  window.open(
+                    `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`,
+                    "_blank"
+                  );
+                }}
+              >
+                🚗 Navigate
+              </button>
+              <button
+                className="flex-1 px-3 py-2 bg-[#3B82F6] text-white rounded-lg text-base font-medium shadow hover:bg-[#2563EB] transition"
+                onClick={() => setShowReviews(!showReviews)}
+              >
+                {showReviews ? "🙈 Hide" : "💬 Reviews"}
+              </button>
+            </div>
+            {showReviews && (
+              <div className="mt-2 bg-gray-50 rounded p-2 shadow text-black">
+                <h3 className="font-semibold mb-1">Reviews</h3>
+                {reviews.length === 0 && <p className="text-sm">No reviews yet.</p>}
+                <ul className="mb-2 max-h-24 overflow-y-auto">
+                  {reviews.map((r, i) => (
+                    <li key={i} className="text-sm border-b last:border-b-0 py-1">{r}</li>
+                  ))}
+                </ul>
+                <textarea
+                  className="w-full border rounded p-1 text-sm mb-1"
+                  rows={2}
+                  placeholder="Write a review..."
+                  value={reviewText}
+                  onChange={e => setReviewText(e.target.value)}
+                />
+                <button
+                  className="w-full bg-[#8FA31E] text-white rounded py-1 mt-1 hover:bg-[#6c8016] transition"
+                  onClick={handleAddReview}
+                >
+                  Submit Review
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Top right contact button */}
       <div className="absolute top-2 right-2 z-20 group">
         <button
           className="flex items-center justify-center w-12 h-12 bg-white rounded-full shadow-md hover:bg-gray-100 transition"
@@ -109,7 +213,6 @@ export default function MainPage() {
         >
           <Megaphone className="w-6 h-6 text-green-700" />
         </button>
-
         <div className="hidden group-hover:block absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-gray-200 p-4 space-y-2 transition-all">
           <ul className="space-y-1">
             <li>
@@ -145,6 +248,7 @@ export default function MainPage() {
         </div>
       </div>
 
+      {/* Search bar */}
       <div className="absolute top-15 md:top-2.5 lg:top-3  left-1/2 transform -translate-x-1/2 z-10 w-[90%] sm:w-[70%] md:w-[50%]">
         <div className="flex items-center bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-200">
           <div className="p-2 pl-3 text-gray-500">
@@ -161,6 +265,7 @@ export default function MainPage() {
         </div>
       </div>
 
+      {/* Map */}
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
@@ -172,14 +277,7 @@ export default function MainPage() {
           onClick={() => setUserShowInfo(true)}
         />
         {showUserInfo && (
-          <InfoWindow
-            position={center}
-            onCloseClick={() => setUserShowInfo(false)}
-          >
-            <div className='p-2 w-50'>
-              <h2 className='text-xl'>Your Location</h2>
-            </div>
-          </InfoWindow>
+          <></>
         )}
 
         {chargers.map((charger) => (
@@ -199,97 +297,6 @@ export default function MainPage() {
             }}
           />
         ))}
-
-        {selectedCharger && (
-          <InfoWindow
-            position={{
-              lat: selectedCharger.AddressInfo.Latitude,
-              lng: selectedCharger.AddressInfo.Longitude
-            }}
-            onCloseClick={() => {
-              setSelectedCharger(null);
-              setShowReviews(false);
-            }}
-          >
-            <div className="flex flex-col">
-              <div className="h-auto w-64 p-3 rounded-xl bg-white shadow-md">
-                <h2 className="font-bold text-lg text-gray-800 mb-1">
-                  {selectedCharger.AddressInfo.Title}
-                </h2>
-                <p className="text-sm text-gray-600 mb-2">
-                  {selectedCharger.AddressInfo.AddressLine1}
-                </p>
-
-                <div className="space-y-1 text-sm text-gray-700">
-                  <p>
-                    <span className="font-semibold">⚡ Power:</span>{" "}
-                    {selectedCharger.Connections && selectedCharger.Connections.length > 0
-                      ? Math.max(...selectedCharger.Connections.map(conn => conn.PowerKW || 0)) + " kW"
-                      : "N/A"}
-                  </p>
-                  <p>
-                    <span className="font-semibold">🔌 Quantity:</span>{" "}
-                    {selectedCharger.Connections ? selectedCharger.Connections.length : "N/A"}
-                  </p>
-                  <p>
-                    <span className="font-semibold">🔋 Type:</span>{" "}
-                    {selectedCharger.Connections.length > 0 &&
-                    selectedCharger.Connections[0].CurrentType
-                      ? selectedCharger.Connections[0].CurrentType.Title
-                      : "N/A"}
-                  </p>
-                </div>
-
-                <div className="mt-3 flex gap-2">
-                  <button
-                    className="flex-1 px-3 py-1.5 bg-[#8FA31E] text-white rounded-lg text-sm font-medium shadow hover:bg-[#6c8016] transition"
-                    onClick={() => {
-                      const lat = selectedCharger.AddressInfo.Latitude;
-                      const lng = selectedCharger.AddressInfo.Longitude;
-                      window.open(
-                        `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`,
-                        "_blank"
-                      );
-                    }}
-                  >
-                    🚗 Navigate
-                  </button>
-                  <button
-                    className="flex-1 px-3 py-1.5 bg-[#3B82F6] text-white rounded-lg text-sm font-medium shadow hover:bg-[#2563EB] transition"
-                    onClick={() => setShowReviews(!showReviews)}
-                  >
-                    {showReviews ? "🙈 Hide" : "💬 Reviews"}
-                  </button>
-                </div>
-              </div>
-
-              {showReviews && (
-                <div className="mt-2 bg-white rounded p-2 shadow text-black">
-                  <h3 className="font-semibold mb-1">Reviews</h3>
-                  {reviews.length === 0 && <p className="text-sm">No reviews yet.</p>}
-                  <ul className="mb-2 max-h-24 overflow-y-auto">
-                    {reviews.map((r, i) => (
-                      <li key={i} className="text-sm border-b last:border-b-0 py-1">{r}</li>
-                    ))}
-                  </ul>
-                  <textarea
-                    className="w-full border rounded p-1 text-sm mb-1"
-                    rows={2}
-                    placeholder="Write a review..."
-                    value={reviewText}
-                    onChange={e => setReviewText(e.target.value)}
-                  />
-                  <button
-                    className="w-full bg-[#8FA31E] text-white rounded py-1 mt-1 hover:bg-[#6c8016] transition"
-                    onClick={handleAddReview}
-                  >
-                    Submit Review
-                  </button>
-                </div>
-              )}
-            </div>
-          </InfoWindow>
-        )}
       </GoogleMap>
     </>
   );
