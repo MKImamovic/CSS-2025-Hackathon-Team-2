@@ -69,7 +69,7 @@ export default function MainPage() {
 
   return (
   <>
-        <div className="flex justify-center p-0.5 bg-transparent m-1 absolute z-10">
+        <div className="flex justify-center p-0.5 bg-transparent m-1 absolute z-10 left-1/2">
           <input className="bg-white text-black border-black-1 rounded-xl m-2 p-1"
           id="search"
             type= "text"
