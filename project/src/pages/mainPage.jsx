@@ -68,46 +68,37 @@ export default function MainPage() {
   }
 
   return (
-    <>
-      <div className="bg-[#FAEDCE]">
-        <div className="bg-[#FEFAE0] min-h-20px flex justify-center">
-          <input
-            id="search"
-            type="text"
-            placeholder="Search a country..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <div className="p-4">
-            <p>{filteredCountries.length} results found</p>
-            <ul>
-              {filteredCountries.map(country => (
-                <li key={country.code}>{country.name}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-      <GoogleMap
-        mapContainerStyle={containerStyle}
-        center={center}
-        zoom={12}
-      >
-        
-        <Marker
-          position={center}
-          onClick={() => setUserShowInfo(true)}
+  <>
+        <div className="flex justify-center p-0.5 bg-transparent m-1 absolute z-10">
+          <input className="bg-white text-black border-black-1 rounded-xl m-2 p-1"
+          id="search"
+            type= "text"
+            placeholder = "Search a country..."
+            value = {searchTerm}
+            onChange = {(e) => setSearchTerm(e.target.value)}
         />
-        {showUserInfo && (
-          <InfoWindow
-            position={center}
-            onCloseClick={() => setUserShowInfo(false)}
-          >
-            <div className='p-2 w-50'>
-              <h2 className='text-xl'>Your Location</h2>
-            </div>
-          </InfoWindow>
-        )}
+        </div>
+      
+
+    <GoogleMap
+      mapContainerStyle={containerStyle}
+      center={center}
+      zoom={12}
+    >
+      <Marker
+        position={center}
+        onClick={() => setUserShowInfo(true)}
+      />
+      {showUserInfo && (
+        <InfoWindow
+          position={center}
+          onCloseClick={() => setUserShowInfo(false)}
+        >
+          <div className='p-2 w-50'>
+            <h2 className='text-xl'>Your Location</h2>
+          </div>
+        </InfoWindow>
+      )}
 
         
         {chargers.map((charger) => (
