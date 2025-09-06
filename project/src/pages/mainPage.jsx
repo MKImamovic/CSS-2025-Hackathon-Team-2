@@ -97,7 +97,7 @@ const defaultCenter = {
           </div>
         </InfoWindow>
       )}
-      
+
     </GoogleMap>
   </>
 );
