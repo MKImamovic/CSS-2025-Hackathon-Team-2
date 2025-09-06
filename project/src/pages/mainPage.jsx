@@ -67,26 +67,17 @@ const defaultCenter = {
 
   return (
   <>
-    <div className="bg-[#FAEDCE]">
-     <div className="bg-[#FEFAE0] min-h-20px flex justify-center">
-      <input
-      id="search"
-         type= "text"
-         placeholder = "Search a country..."
-         value = {searchTerm}
-         onChange = {(e) => setSearchTerm(e.target.value)}
-     />
-     <div className = "p-4">
-      <p>{filteredCountries.length} results found</p>
-      <ul>
-        {filteredCountries.map(country => (
-          <li key={country.code}>{country.name}</li>
-        ))}
-      </ul>
-      </div>
-   </div>
+        <div className="flex justify-center p-0.5 bg-transparent m-1 absolute z-10">
+          <input className="bg-white text-black border-black-1 rounded-xl m-2 p-1"
+          id="search"
+            type= "text"
+            placeholder = "Search a country..."
+            value = {searchTerm}
+            onChange = {(e) => setSearchTerm(e.target.value)}
+        />
+        </div>
+      
 
-  </div>
     <GoogleMap
       mapContainerStyle={containerStyle}
       center={center}
