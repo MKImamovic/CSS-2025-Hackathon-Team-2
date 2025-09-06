@@ -87,7 +87,7 @@ export default function MainPage() {
 
   return (
   <>
-        <div className ="pr-13 pt-1 flex absolute bg-transparent z-10 top-0 right-0 m-2 rounded-full group ">
+        <div className ="pr-13 pt-1 flex absolute bg-transparent z-10 top-0 right-0 m-2 rounded-full group">
           <button className="bg-transparent text-black text-xl " onClick={() => window.location.href= "https://www.gmail.com"}>
           <Megaphone className="h-10 w-10 text-black " />
           </button>
