@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api';
 import Countries from "../data/Countries"
 import { Megaphone } from 'lucide-react';
+import { Eye } from 'lucide-react';
 export default function MainPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCountries, setFilteredCountries] = useState([]);
@@ -87,6 +88,7 @@ export default function MainPage() {
 
   return (
   <>
+        <Eye className='absolute z-10 top-25 left-5 hover:cursor-pointer hover:scale-200 transition duration-200 ease-in-out' />
         <div className ="pr-13 pt-1 flex absolute bg-transparent z-10 top-0 right-0 m-2 rounded-full group ">
           <button className="bg-transparent text-black text-xl " onClick={() => window.location.href= "https://www.gmail.com"}>
           <Megaphone className="h-10 w-10 text-black " />
