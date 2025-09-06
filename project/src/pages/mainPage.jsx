@@ -1,5 +1,32 @@
 import { useState, useEffect } from 'react';
 import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api';
+import Countries  from "../data/Countries"
+export default function MainPage() {
+    const [searchTerm, setSearchTerm] = useState("");
+    const [filteredCountries, setFilteredCountries] = useState([]);
+    const [searchCode , setSearchCode] = useState ("");
+    useEffect(() => {
+      if (searchTerm.length > 0){
+      const results = Countries.filter(country =>
+        country.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        country.code.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredCountries(results);
+
+      console.log(results);
+      if (searchTerm.length > 0) {
+        console.log(results);
+        if (results.length === 1) {
+            setSearchCode(results[0].code);
+            console.log(searchCode);
+            const apiMod = (`https://api.openchargemap.io/v3/poi/?output=json&countrycode=${searchCode}&maxresults=10?key=f4633e6c-f1d0-4b8d-8345-b65c26f9a6af`)
+            console.log(apiMod);
+          }
+      }
+    } else {
+      setFilteredCountries([]);
+    }
+  }, [searchTerm]);   
 
 const containerStyle = {
   width: '100vw',
@@ -11,7 +38,7 @@ const defaultCenter = {
   lng: 15.966568
 };
 
-export default function MainPage() {
+
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: 'AIzaSyCp77wvyFv-bOuCamN78fvonoCEXQCc5_8'
   });
@@ -39,6 +66,27 @@ export default function MainPage() {
   }
 
   return (
+  <>
+    <div className="bg-[#FAEDCE]">
+     <div className="bg-[#FEFAE0] min-h-20px flex justify-center">
+      <input
+      id="search"
+         type= "text"
+         placeholder = "Search a country..."
+         value = {searchTerm}
+         onChange = {(e) => setSearchTerm(e.target.value)}
+     />
+     <div className = "p-4">
+      <p>{filteredCountries.length} results found</p>
+      <ul>
+        {filteredCountries.map(country => (
+          <li key={country.code}>{country.name}</li>
+        ))}
+      </ul>
+      </div>
+   </div>
+
+  </div>
     <GoogleMap
       mapContainerStyle={containerStyle}
       center={center}
@@ -60,6 +108,6 @@ export default function MainPage() {
       )}
 
     </GoogleMap>
-  );
+  </>
+);
 }
-
