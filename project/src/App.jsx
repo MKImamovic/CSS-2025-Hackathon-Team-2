@@ -4,8 +4,11 @@ function App() {
 
   return (
     <>
-      <div className="flex items-center justify denter h-screen w-screen bg-[#FAEDCE]">
-
+      <div className="flex items-center justify-center h-screen w-screen bg-[#FAEDCE]">
+        <div classnmame="block">
+          <h1 className="text-5xl">VoltMap</h1>
+          <button></button>
+        </div>
       </div>
     </>
   )
